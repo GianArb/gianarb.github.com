@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-language" content="en">
+    <meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Nix for developers</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Nix is slowly sneaking in my toolchain as a developer bringing back the joy of provisioning. Not as an exercise of translation between technologies and environment but as the art of building your own environment. ">
+    <meta name="keywords" content="nix">
+    <meta name="google-site-verification" content="FoOIQ005srOjHlH19pNWapHvlOOVgCqHsz47IfQ6QNo" />
+    <link rel="canonical" href="https://gianarb.it/blog/nix-for-developers-sneaking-in-my-toolchain">
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+
+    <meta property="twitter:account_id" content="129952408" />
+    <meta name='twitter:title' content="Nix for developers" />
+    <meta name='twitter:description' content="Nix is slowly sneaking in my toolchain as a developer bringing back the joy of provisioning. Not as an exercise of translation between technologies and environment but as the art of building your own environment. " />
+    <meta name="twitter:url" content="https://gianarb.it/blog/nix-for-developers-sneaking-in-my-toolchain" />
+    <meta name="twitter:creator" content="@gianarb">
+    <meta name="twitter:domain" content="gianarb.it">
+
+    <meta property="og:title" content="Nix for developers" />
+    <meta property="og:site_name" content="gianarb blog"/>
+    <meta property="og:url" content="https://gianarb.it/blog/nix-for-developers-sneaking-in-my-toolchain" />
+    <meta property="og:description" content="Nix is slowly sneaking in my toolchain as a developer bringing back the joy of provisioning. Not as an exercise of translation between technologies and environment but as the art of building your own environment. " />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="en_US" />
+
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="https://gianarb.it/img/hero/nix.png" />
+    <meta name='twitter:image' content="https://gianarb.it/img/hero/nix.png" />
+
+
+    <link rel='alternate' type='application/atom+xml' title='Atom 0.3' href='/atom.xml'>
+
+    <!-- source https://github.com/rsms/inter/ -->
+    <link href="/fonts/inter/inter-ui.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+</head>
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <div class="navbar-brand" href="/">
+            <a href="/" class="nav-link"><img src="/img/favicon.png" class="img-fluid d-inline-block align-top" alt=""></a>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <ul class="navbar-nav ml-auto">
+                <li><a class="nav-link" href="/">Home</a></li>
+                <li><a class="nav-link" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a href="/conferences.html" class="nav-link">Conferences</a></li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CE7DLK7L&placement=gianarbit" id="_carbonads_js"></script>
+                </li>
+            </ul>
+
+        </div> <!-- collapse -->
+
+    </div> <!-- container fluild -->
+</nav>
+
+        
+<style>
+.bgimage {
+  background-image: url('/img/hero/nix.png');
+}
+</style>
+<section class="bgimage">
+</section>
+
+
+<div class="container">
+
+    <div class="content">
+
+        <div class="row">
+            <div id="post-title" class="mt-5 col-md-12">
+                <h1>Nix for developers</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <p class="meta">25 Jan 2021 · <!-- thanks to https://www.davidputney.com/2016/07/how-medium-style-read-time-estimate.html -->
+
+
+<span class="blog-read-time">Eight minute read</span>
+ · nix</p>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-12">
+            <h2 id="nix-is-slowly-sneaking-in-my-toolchain">Nix is slowly sneaking in my toolchain.</h2>
+
+<p>Currently, a lot of my colleagues use Nix. It is a package manager that runs on Linux and macOS. It is versatile. I will show you more about it moving forward, but for now, think about it as a replacement for APT, YUM, and HomeBrew can work on both Mac and Linux. It is also a build system, but I didn’t use it much for it just yet.</p>
+
+<h3 id="not-tight-to-an-operating-system">Not tight to an operating system</h3>
+
+<p>For me, this is already a huge benefit. From time to time, for no reason, I end up switching from Mac to Linux and vice versa. It usually happens because I change the place where I work, and the policy forces me to make some weird decisions.</p>
+
+<p>When I got off college, my parents bought me my first laptop; it was a Macbook Pro, but for the first two, three jobs, I used Linux because Mac was too expensive for my employers, and the main reason for owning a Mac was because back then I was not a fully flashed developers. I used to do video editing, playing with Photoshop, and so on. I quickly learned that I couldn’t match two colors nicely together, and Linux was just enough for me as a developer logging CLI, VIM, and tools like that. When I was in Dublin, Macbook Pro was the only available option; at InfluxData, I had a Thinkpad (the best laptop I ever had). Currently, I work on a Macbook Pro again because the non-apple available option was pretty low in terms of performance.</p>
+
+<p>Now that you know my struggle for laptop and operating system consistency, a tool that works on both sounds appealing.</p>
+
+<p>Nix has its own Linux distribution called NixOS. I slowly have a lot at it, but it is not a topic for this article.</p>
+
+<h3 id="declarative-environment">Declarative environment</h3>
+
+<p>The open-source project I mainly consistently from years is my <a href="https://github.com/gianarb/dotfiles">dotfiles</a> repository. I am probably the only person who knows how to run it, but it contains configuration for the various tools I use.</p>
+
+<p>I have to admit that I would like to install it consistently and quickly on any of my on-demand servers I spin up, but I too lazy for it. Anyway, I like that approach because I describe what I want, and I can consistently get it everywhere. Nix gave me the same possibility, and it does not use a specification language like YAML, JSON, or whatever it uses a dialect.</p>
+
+<p>It is a lazy, pure, and functional language. It is pretty awkward; I have to say, at least for my background. I didn’t figure it out yet, but the more I use it, and better it sticks to my mind.</p>
+
+<p>I am also not that good when it comes to picking up new languages, it takes me some time, and I have to practice with them.</p>
+
+<p>The good thing is that there are plantly of tutorials, each of them with different stakeholders. Do you like to be driven by example? There is <a href="https://nixos.wiki/wiki/Nix_Expression_Language">“Nix by example.”</a> You have time, and you want a more traditional <a href="https://nixos.org/manual/nix/stable/#ch-expression-language">reference manual</a>; they got you covered.</p>
+
+<p>The fact that I don’t have to fight with the template engine makes me happy.</p>
+
+<h3 id="it-is-all-based-on-git">It is all based on Git.</h3>
+
+<p>I use Git since my first day at my first job. I was a solo developer, and my remote repository was not GitHub but a USB stick.</p>
+
+<p>The Nix package manager is a GitHub repository. You can have your one, or you can use <a href="https://github.com/NixOS/nixpkgs">nixpkgs</a>. You can even merge multiple ones. Or import your derivation (the way Nix calls package).</p>
+
+<p>A text editor and Git to clone a repository are what you need to look at all the packages, and their definition gives me a friendly feeling.</p>
+
+<p>Based on how you want to define your environment, you can pin all the packages you are installing to a specific commit SHA from the package manager repository:</p>
+
+<div class="language-nix highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nv">_pkgs</span> <span class="o">=</span> <span class="kr">import</span> <span class="o">&lt;</span><span class="nv">nixpkgs</span><span class="o">&gt;</span> <span class="p">{</span> <span class="p">};</span>
+<span class="kn">in</span>
+<span class="p">{</span> <span class="nv">pkgs</span> <span class="o">?</span>
+  <span class="kr">import</span>
+    <span class="p">(</span><span class="nv">_pkgs</span><span class="o">.</span><span class="nv">fetchFromGitHub</span> <span class="p">{</span>
+      <span class="nv">owner</span> <span class="o">=</span> <span class="s2">"NixOS"</span><span class="p">;</span>
+      <span class="nv">repo</span> <span class="o">=</span> <span class="s2">"nixpkgs"</span><span class="p">;</span>
+      <span class="c">#branch@date: nixpkgs-unstable@2021-01-25</span>
+      <span class="nv">rev</span> <span class="o">=</span> <span class="s2">"ce7b327a52d1b82f82ae061754545b1c54b06c66"</span><span class="p">;</span>
+      <span class="nv">sha256</span> <span class="o">=</span> <span class="s2">"1rc4if8nmy9lrig0ddihdwpzg2s8y36vf20hfywb8hph5hpsg4vj"</span><span class="p">;</span>
+    <span class="p">})</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">}:</span>
+
+<span class="kn">with</span> <span class="nv">pkgs</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Very powerful.</p>
+
+<h3 id="environment-composition-with-nix">Environment composition with Nix</h3>
+
+<p>I am not sure if environment composition has any sense, but it sounds descriptive to me. Nix is user and project aware.</p>
+
+<p>With nix-env, you can install packages as a user. With nix-shell, you can manipulate your system at the project level. If you add NixOS to this chain, you get free customization at the operating system layer.</p>
+
+<p>Currently, nix-shell is the tool I know more about, and I am in love with.</p>
+
+<p>I didn’t experience those composition levels; I am currently writing my home-manager configuration file to solve my dotfiles repository’s required dependencies. Right now, I don’t have a way to install them automatically. I am not sure if that’s the right layer for such a problem yet, but I will figure it out soon.</p>
+
+<h3 id="project-level-sandboxing-with-nix-shell">Project level sandboxing with nix-shell</h3>
+
+<p>With a combination of symlinks and who knows what, nix-shell gives you a sandboxed environment with the only dependencies you need for your project. When you run nix-shell, it looks for a file called shell.nix that describes needed dependencies, environment variables, and so on. By default, you get all the commands and utilities you have in your system plus the one you declared for that project. If you have Go 1.15 in your system but want 1.13 for a single project nix-shell, you want to make it happen, for example. Tinkerbell has a <a href="https://github.com/tinkerbell/tink/blob/master/shell.nix">shell.nix</a> for almost all the repositories.</p>
+
+<p>For some particular scenarios, I use the Docker container in development. But with Nix, I can remove that extra layer. I use containers and images to ship and run my applications on Kubernetes. Removing that layer decreases the need for volume mounting, port forwarding, the debugger works much more comfortably, and performance is the one your hardware provides to you, without virtualization if you are on Mac.</p>
+
+<p>Containers in development are my way to go when for dependencies that I don’t care about or that I will never modify and have a state such as databases. But it is a joy to develop “locally.”</p>
+
+<h3 id="everything-can-be-nixyfied">Everything can be “nixyfied”</h3>
+
+<p>Passing the flag –pure to nix-shell won’t rely on the system installed packages but only on the one specified in nix-shell. It is a great way to validate that the declaration you wrote for your project can work everywhere you can run Nix. It makes continuous delivery what it should be a way to run workflows. It is not like that; for me, it is a constant translation exercise between Jenkinsfile, bash, YAML for GitHub Actions, drone, or Travis. With Nix, you declare the environment, and you can run it everywhere. For example, you can set shebang in your scripts, leaving to nix-shell the responsibility for satisfying the dependencies it needs:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env nix-shell</span>
+<span class="c">#!nix-shell -i bash ../shell.nix</span>
+
+make deploy
+</code></pre></div></div>
+
+<p>If you don’t want to translate from Nix to GitHub actions, there is an action that installs Nix, combined with the right shebang; you can reuse the shell.nix description for your project. I do that in <a href="https://github.com/gianarb/tinkie/blob/master/.github/workflows/ci.yaml">gianarb/tinkie</a>:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">For each commit and PR</span>
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+  <span class="na">pull_request</span><span class="pi">:</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">validation</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">Ubuntu-20.04</span>
+    <span class="na">env</span><span class="pi">:</span>
+      <span class="na">CGO_ENABLED</span><span class="pi">:</span> <span class="s">0</span>
+    <span class="na">steps</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout code</span>
+      <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v2</span>
+    <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">cachix/install-nix-action@v12</span>
+      <span class="na">with</span><span class="pi">:</span>
+        <span class="na">nix_path</span><span class="pi">:</span> <span class="s">nixpkgs=channel:nixos-unstable</span>
+    <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="s">./hack/build-and-deploy.sh</span>
+</code></pre></div></div>
+
+<p>As you can see, I am not using actions to install the dependencies I need, I use <code class="highlighter-rouge">cachix/install-nix-action@v12</code> to get Nix, and everything is managed as I do locally. Something I don’t have to maintain, I suppose.</p>
+
+<p>Mitchell Hashimoto uses Nix to provision its virtual machine, quickly enjoying the Linux environment when it comes to development compared with MacOS.</p>
+
+<p class="text-center"><img src="/img/mitchellh-tweet-nixos.png" alt="Mitchel Hashimoto tweet: I switched my primary dev environment to a graphical NixOS VM on a macOS host. It has been wonderful. I can keep the great GUI ecosystem of macOS, but all dev tools are in a full screen VM. One person said “it basically replaced your terminal app” which is exactly how it feels." class="img-fluid" /></p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>I tend to avoid complications, and I am picky when it comes to the number of tools I have in my toolchain, but after a few months of observation, I think Nix deserves a place in my daily workflow. I just scratched the Nix surface; I didn’t even write my first derivation yet.</p>
+
+<p>It brings back the joy I had a few years ago provisioning infrastructure, which I have lost in the last few years.</p>
+
+<p class="small">Hero image via <a href="https://medium.com/@robinbb/what-is-nix-38375ed59484">Medium.com</a></p>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <div class="footer text-center bg-dark text-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 small">
+                last update July 12, 2021 ·
+                <a href="https://twitter.com/gianarb" target="_blank">twitter.com/gianarb</a> ·
+                <a href="https://github.com/gianarb" target="_blank">github.com/gianarb</a> ·
+                <a href="/atom.xml">Atom</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
